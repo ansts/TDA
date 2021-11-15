@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#PBS -q lifesci
+#PBS -l nodes=1:ppn=16
+#PBS l walltime=60:00:00
+#PBS -N tr100
+#PBS -o tr100${counter}_out
+#PBS -e tr100${counter}_err
+cd ~/APLS
+
+
+/opt/soft/R-3.5.0/bin/Rscript --no-save --no-restore run100tr0.R $counter

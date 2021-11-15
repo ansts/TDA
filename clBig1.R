@@ -188,9 +188,17 @@ resqult=resqult[order(jo),]
 ultflrcol1=apply(resqult,1,function(l) rgb(sum(10^(l[c(2,3,6)]))/sum(10^l), sum(10^(l[c(1,3,5)]))/sum(10^l), sum(10^l[4])/sum(10^l),1))
 plot(uultemb$layout, col=ultflrcol1, pch=16, cex=2, xlab="UMAP D1", ylab="UMAP D2")
 lines(uultemb$layout[cy,], lwd=2)
+prsclt=pnorm(abs(resqult),lower.tail = F)
+prsclt=array(p.adjust(prsclt), dim=dim(resqult))
+resqultsig=resqult[(prsclt[,1]<0.05 | prsclt[,2]<0.05)&!(prsclt[,1]<0.05 & prsclt[,2]<0.05),]
+posqlt=prsclt[(prsclt[,1]<0.05 | prsclt[,2]<0.05)&!(prsclt[,1]<0.05 & prsclt[,2]<0.05),1:2]
+resqultsig[order(posqlt[,2]),]
 
-clAPL=c(10,3,36,8,9,34)
-clCntr=c(18,42,28,27)
+clAPL=c(10,3,36,9,34)
+clCntr=c(18,42,28,17,23)
+clsall=c(clAPL,clCntr)
+pultsig=unlist(ultimateCl[clsall])
+
 
 # Co-occurrence ------------------------------------------------------------
 
@@ -221,8 +229,5 @@ ccomp42=lapply(seq_along(ultimateCl), function(i){
 
 boxplot(ccomp42, outline=F,notch=T, main="Cooccurrence model comparison of cluster 42 to the rest", ylab="Cooc score of individual peptides",xlab="Cluster #" )
 boxplot(ccomp10, outline=F,notch=T, main="Cooccurrence model comparison of cluster 10 to the rest", ylab="Cooc score of individual peptides",xlab="Cluster #" )
-ecGmix=eigen_centrality(Gmix,scale=T)
 
-lorego=ego(Gmix, nodes=V(Gmix)[names(V(Gmix)) %in% names(LOR)])
-lorego=unlist(lapply(lorego, names))
-lorego=unique(lorego)
+

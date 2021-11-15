@@ -89,7 +89,8 @@ rm(ClTr)
 tClTra=table(lengths(ClTra$x))
 i=as.numeric(names(tClTra))>100
 sum(tClTra[i]) # 528/213178 clusters are larger than 100 sequences
-sum(as.numeric(names(tClTra))[i])/length(nms)  # and they contain ~10% of the sequences
+xi=as.numeric(names(tClTra))
+sum(xi[xi>100]*tClTra[xi>100])/sum(lengths(ClTra$x))  # and they contain ~20% of the sequences
 x=as.matrix(ClTra[lengths(ClTra$x)>100,1:112])
 L=nrow(x)
 m0=x!=0
@@ -220,3 +221,8 @@ ccomp42=lapply(seq_along(ultimateCl), function(i){
 
 boxplot(ccomp42, outline=F,notch=T, main="Cooccurrence model comparison of cluster 42 to the rest", ylab="Cooc score of individual peptides",xlab="Cluster #" )
 boxplot(ccomp10, outline=F,notch=T, main="Cooccurrence model comparison of cluster 10 to the rest", ylab="Cooc score of individual peptides",xlab="Cluster #" )
+ecGmix=eigen_centrality(Gmix,scale=T)
+
+lorego=ego(Gmix, nodes=V(Gmix)[names(V(Gmix)) %in% names(LOR)])
+lorego=unlist(lapply(lorego, names))
+lorego=unique(lorego)
